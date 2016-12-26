@@ -6,8 +6,8 @@ import uuid as uuid
 
 from automotion.units import Units
 from constants import Constants
-import matplotlib.pyplot as plt
-import matplotlib.patches as patches
+# import matplotlib.pyplot as plt
+# import matplotlib.patches as patches
 
 
 class ResponsiveUIValidator:
