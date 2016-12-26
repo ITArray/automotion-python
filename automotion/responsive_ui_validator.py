@@ -15,7 +15,7 @@ class ResponsiveUIValidator:
     driver = None
     root_element = None
     root_elements = None
-    root_element_name = ""
+    root_element_name = "Root"
     screenshot_path = ""
     scenario_name = "Default"
     units = Units.PX
@@ -87,8 +87,7 @@ class ResponsiveUIValidator:
                     json_results[Constants.TIME_EXECUTION] = str(
                         str(int(time.mktime(time.gmtime())) - int(self.start_time)) + " milliseconds")
                     json_results[Constants.ELEMENT_NAME] = self.root_element_name
-                    json_results[Constants.SCREENSHOT] = self.root_element_name.replace(" ",
-                                                                                        "") + "-" + screenshot_name
+                    json_results[Constants.SCREENSHOT] = screenshot_name
 
                     ms = time.mktime(time.gmtime())
                     uuid_str = str(uuid.uuid4())[0:7]
