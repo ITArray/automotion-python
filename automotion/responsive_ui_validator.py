@@ -70,7 +70,7 @@ class ResponsiveUIValidator:
                 if self.with_report:
                     if not os.path.exists(Constants.OUTPUT_AUTOMOTION_IMG):
                         os.makedirs(Constants.OUTPUT_AUTOMOTION_IMG)
-                    screenshot_name = "{name}-{time}.png".format(name=self.root_element_name,
+                    screenshot_name = "{name}-{time}.png".format(name=self.root_element_name.replace(" ", "_"),
                                                                  time=time.mktime(time.gmtime()))
                     self.screenshot_path = "{dir}{name}".format(dir=Constants.OUTPUT_AUTOMOTION_IMG,
                                                                  name=screenshot_name)
@@ -85,13 +85,13 @@ class ResponsiveUIValidator:
                     json_results[Constants.SCENARIO] = self.scenario_name
                     json_results[Constants.ROOT_ELEMENT] = root_details
                     json_results[Constants.TIME_EXECUTION] = str(
-                        str(int(time.mktime(time.gmtime())) - int(self.start_time)) + " milliseconds")
+                        str(int(time.mktime(time.gmtime())) - int(self.start_time)) + " seconds")
                     json_results[Constants.ELEMENT_NAME] = self.root_element_name
                     json_results[Constants.SCREENSHOT] = screenshot_name
 
                     ms = time.mktime(time.gmtime())
                     uuid_str = str(uuid.uuid4())[0:7]
-                    json_file_name = self.root_element_name.replace(" ", "") + "-automotion" + str(ms) + uuid_str + ".json"
+                    json_file_name = self.root_element_name.replace(" ", "_") + "-automotion" + str(ms) + uuid_str + ".json"
 
                     if not os.path.exists(Constants.OUTPUT_AUTOMOTION_JSON):
                         os.makedirs(Constants.OUTPUT_AUTOMOTION_JSON)
@@ -117,10 +117,12 @@ class ResponsiveUIValidator:
             map = {}
             for el in self.root_elements:
                 y = el.location['y']
-                if map[y] is None:
+                if map.get(y) is None:
                     map[y] = 1
                 else:
-                    map[y] += 1
+                    c = map[y]
+                    c += 1
+                    map[y] = c
 
             map_size = len(map)
 
@@ -171,8 +173,8 @@ class ResponsiveUIValidator:
                         self.put_json_with_element("Element #{0} has different size. Element height is: [{1}, {2}]".format((i+2), root_elements[i+1].size['width'], root_elements[i+1].size['height']), root_elements[i+1])
 
         else:
-            w = self.root_elements.size['width']
-            h = self.root_elements.size['height']
+            w = root_elements.size['width']
+            h = root_elements.size['height']
 
             if h != self.height_root or w != self.width_root:
                 self.put_json_with_element(str("Element '{0}' has not the same width as {1}. Width of '{2}' is {3}px. "
@@ -210,7 +212,7 @@ class ResponsiveUIValidator:
                     root_elements[i])
 
     def validate_equal_left_right_offset(self, root_elements, readable_name=None):
-        if readable_name is not None:
+        if readable_name is None:
             for el in root_elements:
                 if not self.element_has_equal_left_right_offset(el):
                     self.put_json_with_element(str("Element '{0}' has not equal left and right offset. Left offset is "
@@ -224,7 +226,7 @@ class ResponsiveUIValidator:
                     root_elements), self.get_right_offset(root_elements))), root_elements)
 
     def validate_equal_top_bottom_offset(self, root_elements, readable_name=None):
-        if readable_name is not None:
+        if readable_name is None:
             for el in root_elements:
                 if not self.element_has_equal_top_bottom_offset(el):
                     self.put_json_with_element(str("Element '{0}' has not equal top and bottom offset. Top offset is "
@@ -250,8 +252,8 @@ class ResponsiveUIValidator:
             for el in self.root_elements:
                 x_root = el.location['x']
                 y_root = el.location['y']
-                width_root = el.location['width']
-                height_root = el.location['height']
+                width_root = el.size['width']
+                height_root = el.size['height']
                 if x_root < x_container or y_root < y_container or (x_root + width_root) > (x_container + width_container) or (y_root + height_root) > (y_container + height_container):
                     self.put_json_with_element("Element is not inside of '{0}'".format(readable_name), element)
 

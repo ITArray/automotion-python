@@ -162,4 +162,5 @@ class UIValidator(ResponsiveUIValidator):
 
     def inside_of(self, element, element_name):
         self.validate_inside_of_container(element, element_name)
+        return self
 

@@ -16,8 +16,8 @@ class ResponsiveUIChunkValidator(ResponsiveUIValidator):
         self.units = units
         return self
 
-    def aligned_as_grid(self, horizontal_grid_size, vertical_grid_size=0):
-        self.validate_grid_alignment(horizontal_grid_size, vertical_grid_size)
+    def aligned_as_grid(self, columns, rows=0):
+        self.validate_grid_alignment(columns, rows)
         return self
 
     def are_not_overlapped_with_each_other(self):
