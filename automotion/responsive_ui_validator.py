@@ -1,3 +1,4 @@
+import json
 import os
 
 import time
@@ -16,9 +17,10 @@ class ResponsiveUIValidator:
     driver = None
     root_element = None
     root_elements = None
-    root_element_name = "Root"
+    root_element_name = "List of elements"
     screenshot_path = ""
     scenario_name = "Default"
+    sn = {Constants.SCENARIO: "Default"}
     units = Units.PX
     with_report = False
     error_message = []
@@ -39,9 +41,9 @@ class ResponsiveUIValidator:
         self.driver = driver
         self.error_message = []
 
-    def init(self, scenario_name="Default"):
-        self.scenario_name = scenario_name
-        return ResponsiveUIValidator(self.driver)
+    def init(self, scenario_name=None):
+        self.sn[Constants.SCENARIO] = scenario_name
+        return self
 
     def find_element(self, root_element, element_name):
         from automotion.ui_validator import UIValidator
@@ -83,7 +85,7 @@ class ResponsiveUIValidator:
                     root_details = {Constants.X: self.x_root, Constants.Y: self.y_root,
                                     Constants.WIDTH: self.width_root, Constants.HEIGHT: self.height_root}
 
-                    json_results[Constants.SCENARIO] = self.scenario_name
+                    json_results[Constants.SCENARIO] = self.sn[Constants.SCENARIO]
                     json_results[Constants.ROOT_ELEMENT] = root_details
                     json_results[Constants.TIME_EXECUTION] = str(
                         str(int(time.mktime(time.gmtime())) - int(self.start_time)) + " seconds")
@@ -97,9 +99,8 @@ class ResponsiveUIValidator:
                     if not os.path.exists(Constants.OUTPUT_AUTOMOTION_JSON):
                         os.makedirs(Constants.OUTPUT_AUTOMOTION_JSON)
                     f = open(Constants.OUTPUT_AUTOMOTION_JSON + json_file_name, "w")
-                    f.write(str(json_results))
+                    json.dump(json_results, f)
                     f.close()
-
                     self.json_files.append(json_file_name)
 
                     if bool(json_results[Constants.ERROR_KEY] is True):
