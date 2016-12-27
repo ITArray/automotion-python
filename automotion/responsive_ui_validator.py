@@ -5,6 +5,7 @@ import time
 import uuid as uuid
 
 from automotion.units import Units
+from automotion.html_builder import HtmlReportBuilder
 from constants import Constants
 # import matplotlib.pyplot as plt
 # import matplotlib.patches as patches
@@ -394,7 +395,8 @@ class ResponsiveUIValidator:
         return self
 
     def generate_report(self, report_name=""):
-        pass
+        html_builder = HtmlReportBuilder()
+        html_builder.build_report(self.json_files, report_name=report_name)
 
     def get_page_width(self):
         return self.driver.get_window_size()['width']
