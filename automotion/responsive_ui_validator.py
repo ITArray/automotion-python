@@ -392,13 +392,13 @@ class ResponsiveUIValidator:
 
         dr = ImageDraw.Draw(im)
         if self.draw_left_offset_line:
-            dr.line(((self.x_root, 0), (self.x_root, im.height)), width=2, fill=15)
+            dr.line(((self.x_root, 0), (self.x_root, im.height)), width=2, fill="orange")
         if self.draw_right_offset_line:
-            dr.line(((self.x_root + self.width_root, 0), (self.x_root + self.width_root, im.height)), width=2, fill=15)
+            dr.line(((self.x_root + self.width_root, 0), (self.x_root + self.width_root, im.height)), width=2, fill="orange")
         if self.draw_top_offset_line:
-            dr.line(((0, self.y_root), (im.width, self.y_root)), width=2, fill=15)
+            dr.line(((0, self.y_root), (im.width, self.y_root)), width=2, fill="orange")
         if self.draw_top_offset_line:
-            dr.line(((0, self.y_root + self.height_root), (im.width, self.y_root + self.height_root)), width=2, fill=15)
+            dr.line(((0, self.y_root + self.height_root), (im.width, self.y_root + self.height_root)), width=2, fill="orange")
 
         dr.rectangle(((self.x_root, self.y_root), (self.x_root + self.width_root, self.y_root + self.height_root)), outline="red")
 
