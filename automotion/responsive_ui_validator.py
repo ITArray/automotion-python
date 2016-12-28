@@ -8,8 +8,7 @@ import uuid as uuid
 from automotion.units import Units
 from automotion.html_builder import HtmlReportBuilder
 from constants import Constants
-# import matplotlib.pyplot as plt
-# import matplotlib.patches as patches
+from PIL import Image, ImageFont, ImageDraw
 
 
 class ResponsiveUIValidator:
@@ -105,9 +104,6 @@ class ResponsiveUIValidator:
 
                     if bool(json_results[Constants.ERROR_KEY] is True):
                         self.draw_screenshot()
-
-
-
         else:
             json_results[Constants.ERROR_KEY] = True
             json_results[Constants.DETAILS] = "Set root web element"
@@ -392,8 +388,31 @@ class ResponsiveUIValidator:
         return self.get_top_offset(el) == self.get_bottom_offset(el)
 
     def draw_screenshot(self):
-        pass
-        return self
+        im = Image.open(self.screenshot_path)
+
+        dr = ImageDraw.Draw(im)
+        dr.rectangle(((self.x_root, self.y_root), (self.x_root + self.width_root, self.y_root + self.height_root)), outline="green")
+        if self.draw_left_offset_line:
+            dr.line(((self.x_root, 0), (self.x_root, im.height)), width=3, fill=128)
+        if self.draw_right_offset_line:
+            dr.line(((self.x_root + self.width_root, 0), (self.x_root + self.width_root, im.height)), width=3, fill=128)
+        if self.draw_top_offset_line:
+            dr.line(((0, self.y_root), (im.width, self.y_root)), width=3, fill=128)
+        if self.draw_top_offset_line:
+            dr.line(((0, self.y_root + self.height_root), (im.width, self.y_root + self.height_root)), width=3, fill=128)
+
+        for obj in self.error_message:
+            details = obj[Constants.REASON]
+            num_e = details[Constants.ELEMENT]
+
+            if num_e is not None:
+                x = num_e[Constants.X]
+                y = num_e[Constants.Y]
+                width = num_e[Constants.WIDTH]
+                height = num_e[Constants.HEIGHT]
+                dr.rectangle(((x, y), (x + width, y + height)), outline="blue")
+
+        im.save(self.screenshot_path)
 
     def generate_report(self, report_name=""):
         html_builder = HtmlReportBuilder()
