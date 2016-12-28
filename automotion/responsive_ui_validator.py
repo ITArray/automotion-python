@@ -391,15 +391,16 @@ class ResponsiveUIValidator:
         im = Image.open(self.screenshot_path)
 
         dr = ImageDraw.Draw(im)
-        dr.rectangle(((self.x_root, self.y_root), (self.x_root + self.width_root, self.y_root + self.height_root)), outline="green")
         if self.draw_left_offset_line:
-            dr.line(((self.x_root, 0), (self.x_root, im.height)), width=3, fill=128)
+            dr.line(((self.x_root, 0), (self.x_root, im.height)), width=2, fill=15)
         if self.draw_right_offset_line:
-            dr.line(((self.x_root + self.width_root, 0), (self.x_root + self.width_root, im.height)), width=3, fill=128)
+            dr.line(((self.x_root + self.width_root, 0), (self.x_root + self.width_root, im.height)), width=2, fill=15)
         if self.draw_top_offset_line:
-            dr.line(((0, self.y_root), (im.width, self.y_root)), width=3, fill=128)
+            dr.line(((0, self.y_root), (im.width, self.y_root)), width=2, fill=15)
         if self.draw_top_offset_line:
-            dr.line(((0, self.y_root + self.height_root), (im.width, self.y_root + self.height_root)), width=3, fill=128)
+            dr.line(((0, self.y_root + self.height_root), (im.width, self.y_root + self.height_root)), width=2, fill=15)
+
+        dr.rectangle(((self.x_root, self.y_root), (self.x_root + self.width_root, self.y_root + self.height_root)), outline="red")
 
         for obj in self.error_message:
             details = obj[Constants.REASON]
@@ -410,7 +411,7 @@ class ResponsiveUIValidator:
                 y = num_e[Constants.Y]
                 width = num_e[Constants.WIDTH]
                 height = num_e[Constants.HEIGHT]
-                dr.rectangle(((x, y), (x + width, y + height)), outline="blue")
+                dr.rectangle(((x, y), (x + width, y + height)), outline="lime")
 
         im.save(self.screenshot_path)
 
@@ -435,12 +436,12 @@ class ResponsiveUIValidator:
 
     def validate_not_overlapping_with_elements(self, element, element_name):
         if self.root_element != element:
-            if self.elements_are_overlapped(self.root_element, element):
+            if self.elements_are_overlapped(element, root_element=self.root_element):
                 self.put_json_with_element("Element '{0}' is overlapped with element '{1}' but should not".format(self.root_element_name, element_name), element)
 
     def validate_overlapping_with_elements(self, element, element_name):
         if self.root_element != element:
-            if not self.elements_are_overlapped(self.root_element, element):
+            if not self.elements_are_overlapped(element, root_element=self.root_element):
                 self.put_json_with_element("Element '{0}' is not overlapped with element '{1}' but should".format(self.root_element_name, element_name), element)
 
     def validate_right_offset_for_elements(self, element, param):
