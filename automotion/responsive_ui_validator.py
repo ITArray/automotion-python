@@ -1,14 +1,13 @@
 import json
 import os
-
 import time
-
 import uuid as uuid
 
-from automotion.units import Units
-from automotion.html_builder import HtmlReportBuilder
-from constants import Constants
 from PIL import Image, ImageDraw
+
+from automotion.html_builder import HtmlReportBuilder
+from automotion.units import Units
+from constants import Constants
 
 
 class ResponsiveUIValidator:
@@ -291,7 +290,8 @@ class ResponsiveUIValidator:
 
         if self.root_elements is None or len(self.root_elements) == 0:
             if self.x_root < x_container or self.y_root < y_container or (self.x_root + self.width_root) > (
-                x_container + width_container) or (self.y_root + self.height_root) > (y_container + height_container):
+                        x_container + width_container) or (self.y_root + self.height_root) > (
+                y_container + height_container):
                 self.put_json_with_element(
                     "Element '{0}' is not inside of '{1}'".format(self.root_element_name, readable_name), element)
         else:
@@ -301,7 +301,7 @@ class ResponsiveUIValidator:
                 width_root = el.size['width']
                 height_root = el.size['height']
                 if x_root < x_container or y_root < y_container or (x_root + width_root) > (
-                    x_container + width_container) or (y_root + height_root) > (y_container + height_container):
+                            x_container + width_container) or (y_root + height_root) > (y_container + height_container):
                     self.put_json_with_element("Element is not inside of '{0}'".format(readable_name), element)
 
     def put_json_without_element(self, message):
@@ -614,24 +614,44 @@ class ResponsiveUIValidator:
 
     def validate_left_element(self, element, min_margin=None, max_margin=None):
         if min_margin is None or max_margin is None:
-            return element.location['x'] + element.size['width'] < self.x_root
+            if not (element.location['x'] + element.size['width'] < self.x_root):
+                self.put_json_with_element("Left element is aligned not properly", element)
         else:
-            return min_margin <= (self.x_root - (element.location['x'] + element.size['width'])) <= max_margin
+            if not (min_margin <= (self.x_root - (element.location['x'] + element.size['width'])) <= max_margin):
+                self.put_json_with_element(
+                    "Left element is aligned not properly. Expected margin between {0} and {1}".format(str(min_margin),
+                                                                                                       str(max_margin)),
+                    element)
 
     def validate_right_element(self, element, min_margin=None, max_margin=None):
         if min_margin is None or max_margin is None:
-            return self.x_root + self.width_root < element.location['x']
+            if not (self.x_root + self.width_root < element.location['x']):
+                self.put_json_with_element("Right element is aligned not properly", element)
         else:
-            return min_margin <= (element.location['x'] - (self.x_root + self.width_root)) <= max_margin
+            if not (min_margin <= (element.location['x'] - (self.x_root + self.width_root)) <= max_margin):
+                self.put_json_with_element(
+                    "Right element is aligned not properly. Expected margin between {0} and {1}".format(str(min_margin),
+                                                                                                        str(
+                                                                                                            max_margin)),
+                    element)
 
     def validate_top_element(self, element, min_margin=None, max_margin=None):
         if min_margin is None or max_margin is None:
-            return element.location['y'] + element.size['height'] < self.y_root
+            if not (element.location['y'] + element.size['height'] < self.y_root):
+                self.put_json_with_element("Top element is aligned not properly", element)
         else:
-            return min_margin <= (self.y_root - (element.location['y'] + element.size['height'])) <= max_margin
+            if not (min_margin <= (self.y_root - (element.location['y'] + element.size['height'])) <= max_margin):
+                self.put_json_with_element(
+                    "Top element is aligned not properly. Expected margin between {0} and {1}".format(str(min_margin),
+                                                                                                      str(max_margin)),
+                    element)
 
     def validate_bottom_element(self, element, min_margin=None, max_margin=None):
         if min_margin is None or max_margin is None:
-            return self.y_root + self.height_root < element.location['y']
+            if not (self.y_root + self.height_root < element.location['y']):
+                self.put_json_with_element("Bottom element is aligned not properly", element)
         else:
-            return min_margin <= (element.location['y'] - (self.y_root + self.height_root)) <= max_margin
+            if not (min_margin <= (element.location['y'] - (self.y_root + self.height_root)) <= max_margin):
+                self.put_json_with_element(
+                    "Bottom element is aligned not properly. Expected margin between {0} and {1}".format(
+                        str(min_margin), str(max_margin)), element)
