@@ -8,7 +8,7 @@ import uuid as uuid
 from automotion.units import Units
 from automotion.html_builder import HtmlReportBuilder
 from constants import Constants
-from PIL import Image, ImageFont, ImageDraw
+from PIL import Image, ImageDraw
 
 
 class ResponsiveUIValidator:
@@ -75,7 +75,7 @@ class ResponsiveUIValidator:
                     screenshot_name = "{name}-{time}.png".format(name=self.root_element_name.replace(" ", "_"),
                                                                  time=time.mktime(time.gmtime()))
                     self.screenshot_path = "{dir}{name}".format(dir=Constants.OUTPUT_AUTOMOTION_IMG,
-                                                                 name=screenshot_name)
+                                                                name=screenshot_name)
                     try:
                         self.driver.save_screenshot(self.screenshot_path)
                     except:
@@ -93,7 +93,8 @@ class ResponsiveUIValidator:
 
                     ms = time.mktime(time.gmtime())
                     uuid_str = str(uuid.uuid4())[0:7]
-                    json_file_name = self.root_element_name.replace(" ", "_") + "-automotion" + str(ms) + uuid_str + ".json"
+                    json_file_name = self.root_element_name.replace(" ", "_") + "-automotion" + str(
+                        ms) + uuid_str + ".json"
 
                     if not os.path.exists(Constants.OUTPUT_AUTOMOTION_JSON):
                         os.makedirs(Constants.OUTPUT_AUTOMOTION_JSON)
@@ -154,21 +155,66 @@ class ResponsiveUIValidator:
             for i in range(0, len(root_elements) - 1):
                 h1 = root_elements[i].size['height']
                 w1 = root_elements[i].size['width']
-                h2 = root_elements[i+1].size['height']
-                w2 = root_elements[i+1].size['width']
+                h2 = root_elements[i + 1].size['height']
+                w2 = root_elements[i + 1].size['width']
                 if param == 0:
                     if h1 != h2 or w1 != w2:
-                        self.put_json_with_element("Element #{0} has different size. Element size is: [{1}, {2}]".format((i+1), root_elements[i].size['width'], root_elements[i].size['height']), root_elements[i])
-                        self.put_json_with_element("Element #{0} has different size. Element size is: [{1}, {2}]".format((i+2), root_elements[i+1].size['width'], root_elements[i+1].size['height']), root_elements[i+1])
+                        self.put_json_with_element(
+                            "Element #{0} has different size. Element size is: [{1}, {2}]".format((i + 1),
+                                                                                                  root_elements[i].size[
+                                                                                                      'width'],
+                                                                                                  root_elements[i].size[
+                                                                                                      'height']),
+                            root_elements[i])
+                        self.put_json_with_element(
+                            "Element #{0} has different size. Element size is: [{1}, {2}]".format((i + 2),
+                                                                                                  root_elements[
+                                                                                                      i + 1].size[
+                                                                                                      'width'],
+                                                                                                  root_elements[
+                                                                                                      i + 1].size[
+                                                                                                      'height']),
+                            root_elements[i + 1])
                 elif param == 1:
                     if w1 != w2:
-                        self.put_json_with_element("Element #{0} has different size. Element width is: [{1}, {2}]".format((i+1), root_elements[i].size['width'], root_elements[i].size['height']), root_elements[i])
-                        self.put_json_with_element("Element #{0} has different size. Element width is: [{1}, {2}]".format((i+2), root_elements[i+1].size['width'], root_elements[i+1].size['height']), root_elements[i+1])
+                        self.put_json_with_element(
+                            "Element #{0} has different size. Element width is: [{1}, {2}]".format((i + 1),
+                                                                                                   root_elements[
+                                                                                                       i].size['width'],
+                                                                                                   root_elements[
+                                                                                                       i].size[
+                                                                                                       'height']),
+                            root_elements[i])
+                        self.put_json_with_element(
+                            "Element #{0} has different size. Element width is: [{1}, {2}]".format((i + 2),
+                                                                                                   root_elements[
+                                                                                                       i + 1].size[
+                                                                                                       'width'],
+                                                                                                   root_elements[
+                                                                                                       i + 1].size[
+                                                                                                       'height']),
+                            root_elements[i + 1])
 
                 elif param == 2:
                     if h1 != h2:
-                        self.put_json_with_element("Element #{0} has different size. Element height is: [{1}, {2}]".format((i+1), root_elements[i].size['width'], root_elements[i].size['height']), root_elements[i])
-                        self.put_json_with_element("Element #{0} has different size. Element height is: [{1}, {2}]".format((i+2), root_elements[i+1].size['width'], root_elements[i+1].size['height']), root_elements[i+1])
+                        self.put_json_with_element(
+                            "Element #{0} has different size. Element height is: [{1}, {2}]".format((i + 1),
+                                                                                                    root_elements[
+                                                                                                        i].size[
+                                                                                                        'width'],
+                                                                                                    root_elements[
+                                                                                                        i].size[
+                                                                                                        'height']),
+                            root_elements[i])
+                        self.put_json_with_element(
+                            "Element #{0} has different size. Element height is: [{1}, {2}]".format((i + 2),
+                                                                                                    root_elements[
+                                                                                                        i + 1].size[
+                                                                                                        'width'],
+                                                                                                    root_elements[
+                                                                                                        i + 1].size[
+                                                                                                        'height']),
+                            root_elements[i + 1])
 
         else:
             w = root_elements.size['width']
@@ -244,15 +290,18 @@ class ResponsiveUIValidator:
         height_container = element.size['height']
 
         if self.root_elements is None or len(self.root_elements) == 0:
-            if self.x_root < x_container or self.y_root < y_container or (self.x_root + self.width_root) > (x_container + width_container) or (self.y_root + self.height_root) > (y_container + height_container):
-                self.put_json_with_element("Element '{0}' is not inside of '{1}'".format(self.root_element_name, readable_name), element)
+            if self.x_root < x_container or self.y_root < y_container or (self.x_root + self.width_root) > (
+                x_container + width_container) or (self.y_root + self.height_root) > (y_container + height_container):
+                self.put_json_with_element(
+                    "Element '{0}' is not inside of '{1}'".format(self.root_element_name, readable_name), element)
         else:
             for el in self.root_elements:
                 x_root = el.location['x']
                 y_root = el.location['y']
                 width_root = el.size['width']
                 height_root = el.size['height']
-                if x_root < x_container or y_root < y_container or (x_root + width_root) > (x_container + width_container) or (y_root + height_root) > (y_container + height_container):
+                if x_root < x_container or y_root < y_container or (x_root + width_root) > (
+                    x_container + width_container) or (y_root + height_root) > (y_container + height_container):
                     self.put_json_with_element("Element is not inside of '{0}'".format(readable_name), element)
 
     def put_json_without_element(self, message):
@@ -297,11 +346,13 @@ class ResponsiveUIValidator:
                or ((el_loc['x'] > self.x_root and el_loc['y'] > self.y_root and el_loc['x'] + el_size[
             'width'] < self.x_root and el_loc['y'] + el_size['height'] < self.y_root)
                    or (
-                   el_loc['x'] > self.x_root + self.width_root and el_loc['y'] > self.y_root and el_loc['x'] + el_size[
-                       'width'] < self.x_root + self.width_root and el_loc['y'] + el_size['height'] < self.y_root)
+                       el_loc['x'] > self.x_root + self.width_root and el_loc['y'] > self.y_root and el_loc['x'] +
+                       el_size[
+                           'width'] < self.x_root + self.width_root and el_loc['y'] + el_size['height'] < self.y_root)
                    or (
-                   el_loc['x'] > self.x_root and el_loc['y'] > self.y_root + self.height_root and el_loc['x'] + el_size[
-                       'width'] < self.x_root and el_loc['y'] + el_size['height'] < self.y_root + self.height_root)
+                       el_loc['x'] > self.x_root and el_loc['y'] > self.y_root + self.height_root and el_loc['x'] +
+                       el_size[
+                           'width'] < self.x_root and el_loc['y'] + el_size['height'] < self.y_root + self.height_root)
                    or (el_loc['x'] > self.x_root + self.width_root and el_loc['y'] > self.y_root + self.height_root and
                        el_loc['x'] + el_size['width'] < self.x_root + self.width_root and el_loc['y'] + el_size[
                            'height'] < self.y_root + self.height_root)) \
@@ -394,13 +445,16 @@ class ResponsiveUIValidator:
         if self.draw_left_offset_line:
             dr.line(((self.x_root, 0), (self.x_root, im.height)), width=2, fill="orange")
         if self.draw_right_offset_line:
-            dr.line(((self.x_root + self.width_root, 0), (self.x_root + self.width_root, im.height)), width=2, fill="orange")
+            dr.line(((self.x_root + self.width_root, 0), (self.x_root + self.width_root, im.height)), width=2,
+                    fill="orange")
         if self.draw_top_offset_line:
             dr.line(((0, self.y_root), (im.width, self.y_root)), width=2, fill="orange")
         if self.draw_top_offset_line:
-            dr.line(((0, self.y_root + self.height_root), (im.width, self.y_root + self.height_root)), width=2, fill="orange")
+            dr.line(((0, self.y_root + self.height_root), (im.width, self.y_root + self.height_root)), width=2,
+                    fill="orange")
 
-        dr.rectangle(((self.x_root, self.y_root), (self.x_root + self.width_root, self.y_root + self.height_root)), outline="red")
+        dr.rectangle(((self.x_root, self.y_root), (self.x_root + self.width_root, self.y_root + self.height_root)),
+                     outline="red")
 
         for obj in self.error_message:
             details = obj[Constants.REASON]
@@ -437,93 +491,147 @@ class ResponsiveUIValidator:
     def validate_not_overlapping_with_elements(self, element, element_name):
         if self.root_element != element:
             if self.elements_are_overlapped(element, root_element=self.root_element):
-                self.put_json_with_element("Element '{0}' is overlapped with element '{1}' but should not".format(self.root_element_name, element_name), element)
+                self.put_json_with_element(
+                    "Element '{0}' is overlapped with element '{1}' but should not".format(self.root_element_name,
+                                                                                           element_name), element)
 
     def validate_overlapping_with_elements(self, element, element_name):
         if self.root_element != element:
             if not self.elements_are_overlapped(element, root_element=self.root_element):
-                self.put_json_with_element("Element '{0}' is not overlapped with element '{1}' but should".format(self.root_element_name, element_name), element)
+                self.put_json_with_element(
+                    "Element '{0}' is not overlapped with element '{1}' but should".format(self.root_element_name,
+                                                                                           element_name), element)
 
     def validate_right_offset_for_elements(self, element, param):
         if self.root_element != element:
             if not self.elements_have_equal_left_right_offset(False, self.root_element, element):
-                self.put_json_with_element("Element '{0}' has not the same right offset as element '{1}'".format(self.root_element_name, param), element)
+                self.put_json_with_element(
+                    "Element '{0}' has not the same right offset as element '{1}'".format(self.root_element_name,
+                                                                                          param), element)
 
     def validate_left_offset_for_elements(self, element, param):
         if self.root_element != element:
             if not self.elements_have_equal_left_right_offset(True, self.root_element, element):
-                self.put_json_with_element("Element '{0}' has not the same left offset as element '{1}'".format(self.root_element_name, param), element)
+                self.put_json_with_element(
+                    "Element '{0}' has not the same left offset as element '{1}'".format(self.root_element_name, param),
+                    element)
 
     def validate_top_offset_for_elements(self, element, param):
         if self.root_element != element:
             if not self.elements_have_equal_top_bottom_offset(True, self.root_element, element):
-                self.put_json_with_element("Element '{0}' has not the same top offset as element '{1}'".format(self.root_element_name, param), element)
+                self.put_json_with_element(
+                    "Element '{0}' has not the same top offset as element '{1}'".format(self.root_element_name, param),
+                    element)
 
     def validate_bottom_offset_for_elements(self, element, param):
         if self.root_element != element:
             if not self.elements_have_equal_top_bottom_offset(False, self.root_element, element):
-                self.put_json_with_element("Element '{0}' has not the same bottom offset as element '{1}'".format(self.root_element_name, param), element)
+                self.put_json_with_element(
+                    "Element '{0}' has not the same bottom offset as element '{1}'".format(self.root_element_name,
+                                                                                           param), element)
 
     def validate_same_width(self, element, param):
         if self.root_element != element:
             w = element.size['width']
             if w != self.width_root:
-                self.put_json_with_element("Element '{0}' has not the same width as {1}. Width of '{2}' is {3}px. Width of element is {4}px".format(self.root_element_name, param, self.root_element_name, self.width_root, w), element)
+                self.put_json_with_element(
+                    "Element '{0}' has not the same width as {1}. Width of '{2}' is {3}px. Width of element is {4}px".format(
+                        self.root_element_name, param, self.root_element_name, self.width_root, w), element)
 
     def validate_min_width(self, width):
         if self.width_root < width:
-            self.put_json_without_element("Expected max width of element '{0}' is: {1}px. Actual width is: {2}px".format(self.root_element_name, width, self.width_root))
+            self.put_json_without_element(
+                "Expected max width of element '{0}' is: {1}px. Actual width is: {2}px".format(self.root_element_name,
+                                                                                               width, self.width_root))
 
     def validate_max_width(self, width):
         if self.width_root > width:
-            self.put_json_without_element("Expected max width of element '{0}' is: {1}px. Actual width is: {2}px".format(self.root_element_name, width, self.width_root))
+            self.put_json_without_element(
+                "Expected max width of element '{0}' is: {1}px. Actual width is: {2}px".format(self.root_element_name,
+                                                                                               width, self.width_root))
 
     def validate_same_height(self, element, param):
         if self.root_element != element:
             h = element.size['height']
             if h != self.height_root:
-                self.put_json_with_element("Element '{0}' has not the same height as {1}. Height of '{2}' is {3}px. Height of element is {4}px".format(self.root_element_name, param, self.root_element_name, self.height_root, h), element)
+                self.put_json_with_element(
+                    "Element '{0}' has not the same height as {1}. Height of '{2}' is {3}px. Height of element is {4}px".format(
+                        self.root_element_name, param, self.root_element_name, self.height_root, h), element)
 
     def validate_min_height(self, height):
         if self.height_root < height:
-            self.put_json_without_element("Expected min height of element '{0}' is: {1}px. Actual height is: {2}px".format(self.root_element_name, height, self.height_root))
+            self.put_json_without_element(
+                "Expected min height of element '{0}' is: {1}px. Actual height is: {2}px".format(self.root_element_name,
+                                                                                                 height,
+                                                                                                 self.height_root))
 
     def validate_max_height(self, height):
         if self.height_root > height:
-            self.put_json_without_element("Expected max height of element '{0}' is: {1}px. Actual height is: {2}px".format(self.root_element_name, height, self.height_root))
+            self.put_json_without_element(
+                "Expected max height of element '{0}' is: {1}px. Actual height is: {2}px".format(self.root_element_name,
+                                                                                                 height,
+                                                                                                 self.height_root))
 
     def validate_min_offset(self, top, right, bottom, left):
         root_element_right_offset = self.get_right_offset(self.root_element)
         root_element_bottom_offset = self.get_bottom_offset(self.root_element)
         if self.x_root < left:
-            self.put_json_without_element("Expected min left offset of element '{0}' is: {1}px. Actual left offset is: {2}px".format(self.root_element_name, left, self.x_root))
+            self.put_json_without_element(
+                "Expected min left offset of element '{0}' is: {1}px. Actual left offset is: {2}px".format(
+                    self.root_element_name, left, self.x_root))
         if self.y_root < top:
-            self.put_json_without_element("Expected min top offset of element '{0}' is: {1}px. Actual top offset is: {2}px".format(self.root_element_name, top, self.y_root))
+            self.put_json_without_element(
+                "Expected min top offset of element '{0}' is: {1}px. Actual top offset is: {2}px".format(
+                    self.root_element_name, top, self.y_root))
         if root_element_right_offset < right:
-            self.put_json_without_element("Expected min right offset of element '{0}' is: {1}px. Actual right offset is: {2}px".format(self.root_element_name, right, root_element_right_offset))
+            self.put_json_without_element(
+                "Expected min right offset of element '{0}' is: {1}px. Actual right offset is: {2}px".format(
+                    self.root_element_name, right, root_element_right_offset))
         if root_element_bottom_offset < bottom:
-            self.put_json_without_element("Expected min bottom offset of element '{0}' is: {1}px. Actual bottom offset is: {2}px".format(self.root_element_name, bottom, root_element_bottom_offset))
+            self.put_json_without_element(
+                "Expected min bottom offset of element '{0}' is: {1}px. Actual bottom offset is: {2}px".format(
+                    self.root_element_name, bottom, root_element_bottom_offset))
 
     def validate_max_offset(self, top, right, bottom, left):
         root_element_right_offset = self.get_right_offset(self.root_element)
         root_element_bottom_offset = self.get_bottom_offset(self.root_element)
         if self.x_root > left:
-            self.put_json_without_element("Expected max left offset of element '{0}' is: {1}px. Actual left offset is: {2}px".format(self.root_element_name, left, self.x_root))
+            self.put_json_without_element(
+                "Expected max left offset of element '{0}' is: {1}px. Actual left offset is: {2}px".format(
+                    self.root_element_name, left, self.x_root))
         if self.y_root > top:
-            self.put_json_without_element("Expected max top offset of element '{0}' is: {1}px. Actual top offset is: {2}px".format(self.root_element_name, top, self.y_root))
+            self.put_json_without_element(
+                "Expected max top offset of element '{0}' is: {1}px. Actual top offset is: {2}px".format(
+                    self.root_element_name, top, self.y_root))
         if root_element_right_offset > right:
-            self.put_json_without_element("Expected max right offset of element '{0}' is: {1}px. Actual right offset is: {2}px".format(self.root_element_name, right, root_element_right_offset))
+            self.put_json_without_element(
+                "Expected max right offset of element '{0}' is: {1}px. Actual right offset is: {2}px".format(
+                    self.root_element_name, right, root_element_right_offset))
         if root_element_bottom_offset > bottom:
-            self.put_json_without_element("Expected max bottom offset of element '{0}' is: {1}px. Actual bottom offset is: {2}px".format(self.root_element_name, bottom, root_element_bottom_offset))
+            self.put_json_without_element(
+                "Expected max bottom offset of element '{0}' is: {1}px. Actual bottom offset is: {2}px".format(
+                    self.root_element_name, bottom, root_element_bottom_offset))
 
-    def validate_left_element(self, element, min_margin, max_margin):
-        pass
+    def validate_left_element(self, element, min_margin=None, max_margin=None):
+        if min_margin is None or max_margin is None:
+            return element.location['x'] + element.size['width'] < self.x_root
+        else:
+            return min_margin <= (self.x_root - (element.location['x'] + element.size['width'])) <= max_margin
 
-    def validate_right_element(self, element, min_margin, max_margin):
-        pass
+    def validate_right_element(self, element, min_margin=None, max_margin=None):
+        if min_margin is None or max_margin is None:
+            return self.x_root + self.width_root < element.location['x']
+        else:
+            return min_margin <= (element.location['x'] - (self.x_root + self.width_root)) <= max_margin
 
-    def validate_top_element(self, element, min_margin, max_margin):
-        pass
+    def validate_top_element(self, element, min_margin=None, max_margin=None):
+        if min_margin is None or max_margin is None:
+            return element.location['y'] + element.size['height'] < self.y_root
+        else:
+            return min_margin <= (self.y_root - (element.location['y'] + element.size['height'])) <= max_margin
 
-    def validate_bottom_element(self, element, min_margin, max_margin):
-        pass
+    def validate_bottom_element(self, element, min_margin=None, max_margin=None):
+        if min_margin is None or max_margin is None:
+            return self.y_root + self.height_root < element.location['y']
+        else:
+            return min_margin <= (element.location['y'] - (self.y_root + self.height_root)) <= max_margin
