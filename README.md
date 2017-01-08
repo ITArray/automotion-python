@@ -1,3 +1,8 @@
+[![Gratipay User](https://img.shields.io/gratipay/user/dzaiats.svg)](https://gratipay.com/~dzaiats/)
+
+# Automotion #
+![alt tag](https://www.itarray.net/wp-content/uploads/2016/12/Automotion-2.jpg)
+
 # Automotion-Python
 Python version of Automotion library
 
