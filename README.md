@@ -20,7 +20,7 @@ Python version of Automotion library
                    .inside_of({element}, "Container")
                    .not_overlap_with({element}, "Other element")
                    .with_top_element({element}, 10, 15)
-                   .change_metrics_units_to(ResponsiveUIValidator.Units.PERCENT)
+                   .change_metrics_units_to(Units.PERCENT)
                    .width_between(50, 55)
                    .heigh_between(90, 95)
                    .draw_map()
