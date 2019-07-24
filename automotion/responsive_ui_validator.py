@@ -7,7 +7,7 @@ from PIL import Image, ImageDraw
 
 from automotion.html_builder import HtmlReportBuilder
 from automotion.units import Units
-from constants import Constants
+from automotion.constants import Constants
 
 
 class ResponsiveUIValidator:
